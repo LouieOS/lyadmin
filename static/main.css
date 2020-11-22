@@ -1,8 +1,12 @@
+html {
+    background: #000;
+}
+
 body {
     margin: 0;
     padding: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #060;
+    color: #fff;
 }
 
   /*
@@ -10,7 +14,6 @@ body {
    */
 
 header {
-    background-color: #DFB887;
     height: 35px;
     width: 100%;
     opacity: .9;
