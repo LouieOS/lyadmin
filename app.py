@@ -1,0 +1,29 @@
+from flask import Flask, redirect, url_for, render_template, request
+
+app=Flask(__name__)
+
+@app.route("/")
+def home():
+    app.route('/')
+    return render_template("home.html")
+
+def home2(name):
+    # app.route('/home2/<name>')
+    # return redirect(url_for('home'))
+    return render_template("home.html")
+
+def success(name):
+    return "welcome %s" % name
+
+def login():
+    if request.method == "POST":
+        user = request.form["nm"]
+        return redirect(url_for('success', name = user))
+    else:
+        return redirect(url_for('home'))
+
+if __name__=="__main__":
+    app.add_url_rule('/home2/<name>', 'home2', home2)
+    app.add_url_rule('/success/<name>', 'success', success)
+    app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
+    app.run(host="192.168.1.228",debug=True)
