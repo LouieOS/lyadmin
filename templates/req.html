@@ -1,0 +1,23 @@
+{%extends "layout.html"%}
+
+{%block content%}
+<p>
+
+  <table>
+    {% for key, value in req_tab.items() %}
+    <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+    {% endfor %}
+  </table>
+</p>
+
+<p>
+A requested feature is to have to allow users to have a unicode username since unicode allows for more interesting aesthics
+</br>
+If you enter a unicode display name, the system will try to display your unicode name when possbile. It will also be your default in terminal prompt, chat and your tilde path
+</br>
+the linux os only sees your true ascii username. so your ssh login, file permissions etc will user your true username
+</br>
+feedback on this feature welcome
+</p>
+
+{%endblock%}

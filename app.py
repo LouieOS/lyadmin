@@ -15,6 +15,18 @@ def home2(name):
 def success(name):
     return "welcome %s" % name
 
+def req():
+    rt = {
+        "username": "bob",
+        "displayname": "bob",
+        "default to display name?": "no",
+        "email for account lockout / registration confirmation (optional)": "fuck no",
+        "SSH public key": "123",
+        "shell of choice": "/bin/bash",
+        "have you read the rules?": "lolyeah"
+        };
+    return render_template("req.html", req_tab = rt)
+
 def login():
     if request.method == "POST":
         user = request.form["nm"]
@@ -26,4 +38,5 @@ if __name__=="__main__":
     app.add_url_rule('/home2/<name>', 'home2', home2)
     app.add_url_rule('/success/<name>', 'success', success)
     app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
+    app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
     app.run(host="192.168.1.228",debug=True)
