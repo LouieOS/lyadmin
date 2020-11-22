@@ -15,17 +15,36 @@ def home2(name):
 def success(name):
     return "welcome %s" % name
 
+# this is a weird way to do this
+# right? 
+def widg_fun(widg):
+    if(widg.w_type == "input"):
+        return "input id=id_%s name=%s type=text></input"%(widg.w_name, widg.w_name)
+    elif(widg.w_type == "textarea"):
+        return "textarea cols=40 id=id_%s name=%s rows=10 required=\"\""%(widg.w_name, widg.w_name)
+    elif(widg.w_type == "check"):
+        return "input id=id_%s name=%s type=checkbox required=\"\""%(widg.w_name, widg.w_name)
+    return widg.w_type;
+
 def req():
+    class Widg:
+        def __init__(self, w_name, w_type, w_opt):
+            self.w_name = w_name
+            self.w_type = w_type
+            self.w_opt = w_opt
+        
     rt = {
-        "username": "bob",
-        "displayname": "bob",
-        "default to display name?": "no",
-        "email for account lockout / registration confirmation (optional)": "fuck no",
-        "SSH public key": "123",
-        "shell of choice": "/bin/bash",
-        "have you read the rules?": "lolyeah"
+        "username": Widg("username", "input", None),
+        "displayname": Widg("displayname", "input", None),
+        "prefer display name?": Widg("default_disp", "check", None),
+        "email for account lockout / registration confirmation (optional)": Widg("email", "input", None),
+        "SSH public key": Widg("pub_key", "textarea", None),
+        "shell of choice": Widg("shell", "choice", [("bash", "/bin/bash"), ("ksh", "/bin/ksh")]),
+        "have you read the rules?": Widg("rule_read", "check", None)
         };
-    return render_template("req.html", req_tab = rt)
+
+    # uhhh is this how you're supposed to do this?
+    return render_template("req.html", req_tab = rt, widg_fun = widg_fun)
 
 def login():
     if request.method == "POST":

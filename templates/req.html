@@ -3,12 +3,28 @@
 {%block content%}
 <p>
 
+  <form action="/req/signup" method="post">
   <table>
     {% for key, value in req_tab.items() %}
-    <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+    <tr><td>{{ key }}</td><td>
+
+	{%if value.w_type != "choice" %}
+	<{{ widg_fun(value) }}></{{value.w_type}}>
+	{%elif value.w_type == "choice" %}
+	<select id="id_{{value.w_name}}" name="{{value.w_name}}" required="">
+	  {% for opt in value.w_opt %}
+	  <option value="{{opt[0]}}">{{opt[1]}}</option>
+	  {% endfor %}
+	</select>
+	{% endif %}
+    </td></tr>    
     {% endfor %}
+    <tr><td><input type="submit" value="sign up"></td></tr>
   </table>
+  </form>
 </p>
+
+<p>
 
 <p>
 A requested feature is to have to allow users to have a unicode username since unicode allows for more interesting aesthics
