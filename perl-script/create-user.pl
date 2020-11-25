@@ -15,7 +15,7 @@ my $SHELL_ENUM = {
 
 my @g;
 
-sub fun1($){
+sub create($){
     my $id = $_[0];
     
     my $fn1 = $FULL_PATH.$id.".ident";
@@ -38,7 +38,6 @@ sub fun1($){
 	$shell_pref = $SHELL_ENUM->{$shell_var};
     }
 
-    # printf("checking username %s\n", $username);
     if(length($username) > 31 || !($username =~ /^[A-Za-z][A-Za-z0-9]+$/)){
 	printf("%s has an INVALID username\n", $id);
 	die ("oh no");
@@ -65,14 +64,10 @@ sub fun1($){
     close FILE;
 }
 
-fun1("00004");
-
-die "test 0";
-
 @g = glob("$FULL_PATH*");
 @g = map { s/.*\/([^\/]*).pub$/$1/; $_ } grep {$_ =~ /pub$/} @g;
 
 for my $fn (@g){
-    printf("%s\n", $fn);
+    create($fn);
 }
 
