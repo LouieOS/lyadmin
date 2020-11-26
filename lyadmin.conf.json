@@ -1,0 +1,7 @@
+{
+    "instance_name": "lingy.in",
+    "shell": {
+	"SHELL_BASH": "/usr/local/bin/bash",
+	"SHELL_KSH": "/bin/ksh"
+    }
+}

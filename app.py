@@ -1,17 +1,23 @@
 import glob
+import json
 from flask import Flask, redirect, url_for, render_template, request
+
+app=Flask(__name__)
 
 WORKING_DIR = "/home/gashapwn/lyadmin/";
 ACCOUNT_DIR = "test/";
 
 FULL_PATH = str(WORKING_DIR) + str(ACCOUNT_DIR)
 
+CONF_PATH = str(WORKING_DIR) + "lyadmin.conf.json"
+
 # Account requests are given ID numbers
 # the first request will have the below
 # id number
 INIT_REQ_ID = "00000"
 
-app=Flask(__name__)
+with open(CONF_PATH) as c: conf_json_str = c.read()
+conf_obj = json.loads(conf_json_str)
 
 @app.route("/")
 def home():
@@ -59,7 +65,7 @@ def req():
         "username": Widg("username", "input", None),
         "email for account lockout / registration confirmation (optional)": Widg("email", "input", None),
         "SSH public key": Widg("pub_key", "textarea", None),
-        "shell of choice": Widg("shell", "choice", [("bash", "/bin/bash"), ("ksh", "/bin/ksh")]),
+        "shell of choice": Widg("shell", "choice", map(lambda k : (k, conf_obj["shell"][k]), list(conf_obj["shell"].keys()))),
         "have you read the rules?": Widg("rule_read", "check", None)
         };
 
