@@ -37,6 +37,7 @@ def widg_fun(widg):
     return widg.w_type;
 
 def req():
+    app.route('/req')
     class Widg:
         def __init__(self, w_name, w_type, w_opt):
             self.w_name = w_name
@@ -55,13 +56,23 @@ def req():
     return render_template("req.html", req_tab = rt, widg_fun = widg_fun, page_name="req")
 
 def signup():
+    app.route('/req/signup')
+    
     username = request.form["username"]
     email = request.form["email"]
     shell = request.form["shell"]
     rule_read = request.form["rule_read"]
 
+    is_email_user = False;
+
     if(rule_read != "on"):
-        print("some fail condition")
+        return redirect(url_for('req'))
+
+    if(len(email) > 1):
+        is_email_user = True
+
+    print(username + " " + email + " " + shell + " " + rule_read)
+    return render_template("signup.html", is_email_user = is_email_user)
     
 
 def login():
@@ -77,5 +88,5 @@ if __name__=="__main__":
     app.add_url_rule('/success/<name>', 'success', success)
     app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
-    app.add_url_rule('/req/signup', 'req', req, methods = ['POST'])
+    app.add_url_rule('/req/signup', 'signup', signup, methods = ['POST'])
     app.run(host="104.248.118.130",debug=True)

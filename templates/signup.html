@@ -1,0 +1,21 @@
+{%extends "layout.html"%}
+
+{%block content%}
+  <h3>submission successful</h3>
+<p>
+  once your request is approved your account will be created
+  {% if is_email_user %}
+  and you will receive a confirmation email
+</p>
+  {% else %}
+you did not provide an emailn
+to see if your account is ready, check the users list on the home page
+this page will be updated with your username once approved
+</p>
+  {% endif %}
+<p>
+  if you have questions, email gashapwn@protonmail.com
+  or DM gashapwn on IRC at irc.lainchan.org
+<p>
+
+{%endblock%}
