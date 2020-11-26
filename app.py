@@ -58,4 +58,4 @@ if __name__=="__main__":
     app.add_url_rule('/success/<name>', 'success', success)
     app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
-    app.run(host="192.168.1.228",debug=True)
+    app.run(host="104.248.118.130",debug=True)
