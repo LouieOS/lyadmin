@@ -11,7 +11,11 @@ def home():
         for line in u_file:
             u_list.append(line);
     
-    return render_template("index.html", u_list=u_list)
+    return render_template("index.html", u_list=u_list, page_name="home")
+
+
+def rules():
+    return render_template("rules.html")
 
 def home2(name):
     # app.route('/home2/<name>')
@@ -41,8 +45,6 @@ def req():
         
     rt = {
         "username": Widg("username", "input", None),
-        "displayname": Widg("displayname", "input", None),
-        "prefer display name?": Widg("default_disp", "check", None),
         "email for account lockout / registration confirmation (optional)": Widg("email", "input", None),
         "SSH public key": Widg("pub_key", "textarea", None),
         "shell of choice": Widg("shell", "choice", [("bash", "/bin/bash"), ("ksh", "/bin/ksh")]),
@@ -50,7 +52,17 @@ def req():
         };
 
     # uhhh is this how you're supposed to do this?
-    return render_template("req.html", req_tab = rt, widg_fun = widg_fun)
+    return render_template("req.html", req_tab = rt, widg_fun = widg_fun, page_name="req")
+
+def signup():
+    username = request.form["username"]
+    email = request.form["email"]
+    shell = request.form["shell"]
+    rule_read = request.form["rule_read"]
+
+    if(rule_read != "on"):
+        print("some fail condition")
+    
 
 def login():
     if request.method == "POST":
@@ -61,7 +73,9 @@ def login():
 
 if __name__=="__main__":
     app.add_url_rule('/home2/<name>', 'home2', home2)
+    app.add_url_rule('/rules', 'rules', rules)
     app.add_url_rule('/success/<name>', 'success', success)
     app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
+    app.add_url_rule('/req/signup', 'req', req, methods = ['POST'])
     app.run(host="104.248.118.130",debug=True)

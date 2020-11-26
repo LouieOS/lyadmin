@@ -1,5 +1,7 @@
 html {
     background: #000;
+    background-image: url("req.png");
+    background-repeat: no-repeat;    
 }
 
 h1{
