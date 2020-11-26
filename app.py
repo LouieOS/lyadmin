@@ -1,4 +1,15 @@
+import glob
 from flask import Flask, redirect, url_for, render_template, request
+
+WORKING_DIR = "/home/gashapwn/lyadmin/";
+ACCOUNT_DIR = "test/";
+
+FULL_PATH = str(WORKING_DIR) + str(ACCOUNT_DIR)
+
+# Account requests are given ID numbers
+# the first request will have the below
+# id number
+INIT_REQ_ID = "00000"
 
 app=Flask(__name__)
 
@@ -57,7 +68,7 @@ def req():
 
 def signup():
     app.route('/req/signup')
-    
+
     username = request.form["username"]
     email = request.form["email"]
     shell = request.form["shell"]
@@ -70,7 +81,26 @@ def signup():
 
     if(len(email) > 1):
         is_email_user = True
+    else:
+        email = "NO_EMAIL"
 
+    if(len(glob.glob("./test/[0-9]*ident*")) == 0):
+        new_id = int(INIT_REQ_ID)
+        new_id_str = INIT_REQ_ID
+    else:
+        max_id = max(list(map( lambda path : path.split("/")[-1].split(".")[0] , glob.glob("./test/[0-9]*ident*"))))
+        zpad = len(max_id)
+        new_id = int(max_id)+1
+        new_id_str = str(new_id).zfill(zpad)
+
+    fn1 = str(FULL_PATH) + str(new_id_str) + ".ident"
+    
+    with open(fn1, "w") as ident_file:
+        ident_file.write(str(username) + "\n")
+        ident_file.write(str(email) + "\n")
+        ident_file.write(str(shell) + "\n")
+        ident_file.write(str(rule_read) + "\n")
+        
     print(username + " " + email + " " + shell + " " + rule_read)
     return render_template("signup.html", is_email_user = is_email_user)
     
