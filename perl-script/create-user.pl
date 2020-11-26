@@ -53,16 +53,11 @@ sub create($){
 	}
 	
 	system($cmd);
-	#system("mkdir /home/$username/.ssh");
-	#system("chmod 700 /home/$username/.ssh");
 	system("cat $FULL_PATH/$id.pub > /home/$username/.ssh/authorized_keys");
-	#system("mv $FULL_PATH/$id.pub /home/$username/.ssh/authorized_keys");
-	#system("chmod 600 /home/$username/.ssh/authorized_keys");
 	system("chmod 711 /home/$username");
-	#system("chown $username:$username /home/$username/.ssh");
-	#system("chown $username:$username /home/$username/.ssh/authorized_keys");
 	system("rm $FULL_PATH/$id.ident");
 	system("rm $FULL_PATH/$id.pub");
+	system("echo $username >> user_list.txt");
     }
     close FILE;
 }

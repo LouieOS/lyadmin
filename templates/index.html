@@ -9,8 +9,9 @@
   <p>git</p>
   <p>users</p>
   <ol>
-    <li>gashapwn</li>
-    <li>china probably</li>
+    {% for user in u_list %}
+    <li><a href="~{{user}}">{{user}}</a></li>
+    {% endfor %}
   </ol>
 </div>
 {%endblock%}

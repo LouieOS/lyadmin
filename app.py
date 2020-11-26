@@ -5,7 +5,13 @@ app=Flask(__name__)
 @app.route("/")
 def home():
     app.route('/')
-    return render_template("index.html")
+
+    u_list = [];
+    with open("user_list.txt") as u_file:
+        for line in u_file:
+            u_list.append(line);
+    
+    return render_template("index.html", u_list=u_list)
 
 def home2(name):
     # app.route('/home2/<name>')
