@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <head>
   <title>LAINTILDE0</title>
+  {% if page_name %}
   <link rel="stylesheet" href="{{url_for('static',filename='main_' + page_name + '.css')}}">
+  {% else %}
+  <link rel="stylesheet" href="{{url_for('static',filename='main.css')}}">
+  {% endif %}
 </head>
 <h1>lingy.in</h1>
 <body>

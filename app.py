@@ -8,8 +8,8 @@ def home():
 
     u_list = [];
     with open("user_list.txt") as u_file:
-        for line in u_file:
-            u_list.append(line);
+        for line in u_file.readlines():
+            u_list.append(line.strip());
     
     return render_template("index.html", u_list=u_list, page_name="home")
 
