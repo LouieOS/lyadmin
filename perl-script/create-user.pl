@@ -19,13 +19,14 @@ sub create($){
     my $id = $_[0];
     
     my $fn1 = $FULL_PATH.$id.".ident";
-    my $fn2 = $FULL_PATH.$id.".pub";
+    # my $fn2 = $FULL_PATH.$id.".pub";
 
     my $username;
     my $shell_pref;
     my $user_email;
+    my $pub_key;
 
-    open FILE, $fn1 or die "could not open file";
+    open FILE, $fn1 or die "could not open file $fn1";
     $username = <FILE>;
     chomp $username;
     
@@ -33,10 +34,13 @@ sub create($){
     chomp $user_email;
     
     {
-	my $shell_var = <FILE>;
-	chomp $shell_var;
-	$shell_pref = $SHELL_ENUM->{$shell_var};
+	my $s0 = <FILE>;
+	chomp $s0;
+	$shell_pref = $SHELL_ENUM->{$s0};
     }
+
+    $pub_key = <FILE>;
+    chomp $pub_key;
 
     if(length($username) > 31 || !($username =~ /^[A-Za-z][A-Za-z0-9]+$/)){
 	printf("%s has an INVALID username\n", $id);
@@ -48,22 +52,23 @@ sub create($){
 	$cmd = "useradd -m -s " . $shell_pref . " " . $username; 
 	printf("Y/N is this command OK?: %s\n", $cmd);
 	
-	if(<STDIN> ne "Y\n"){
+	if(!(<STDIN> =~ /^y/i)){
 	    die "invalid characters?!!";
 	}
 	
 	system($cmd);
-	system("cat $FULL_PATH/$id.pub > /home/$username/.ssh/authorized_keys");
+	# system("cat $FULL_PATH/$id.pub > /home/$username/.ssh/authorized_keys");
+	system("echo '$pub_key' > /home/$username/.ssh/authorized_keys");
 	system("chmod 711 /home/$username");
-	system("rm $FULL_PATH/$id.ident");
-	system("rm $FULL_PATH/$id.pub");
+	system("rm $fn1");
+	# system("rm $FULL_PATH/$id.pub");
 	system("echo $username >> user_list.txt");
     }
     close FILE;
 }
 
 @g = glob("$FULL_PATH*");
-@g = map { s/.*\/([^\/]*).pub$/$1/; $_ } grep {$_ =~ /pub$/} @g;
+@g = map { s/.*\/([^\/]*).ident$/$1/; $_ } grep {$_ =~ /ident$/} @g;
 
 for my $fn (@g){
     create($fn);
