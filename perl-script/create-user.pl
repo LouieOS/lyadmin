@@ -19,7 +19,6 @@ sub create($){
     my $id = $_[0];
     
     my $fn1 = $FULL_PATH.$id.".ident";
-    # my $fn2 = $FULL_PATH.$id.".pub";
 
     my $username;
     my $shell_pref;
@@ -57,11 +56,9 @@ sub create($){
 	}
 	
 	system($cmd);
-	# system("cat $FULL_PATH/$id.pub > /home/$username/.ssh/authorized_keys");
 	system("echo '$pub_key' > /home/$username/.ssh/authorized_keys");
 	system("chmod 711 /home/$username");
-	system("rm $fn1");
-	# system("rm $FULL_PATH/$id.pub");
+	system("mv $fn1 $fn1.done");
 	system("echo $username >> user_list.txt");
     }
     close FILE;
