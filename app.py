@@ -136,7 +136,6 @@ def signup():
         ident_file.write(str(shell) + "\n")
         ident_file.write(str(pub_key) + "\n")
         
-    print(username + " " + email + " " + shell + " " + rule_read)
     return render_template("signup.html", is_email_user = is_email_user)
 
 if __name__=="__main__":
