@@ -34,14 +34,6 @@ def home():
 def rules():
     return render_template("rules.html")
 
-def home2(name):
-    # app.route('/home2/<name>')
-    # return redirect(url_for('home'))
-    return render_template("home.html")
-
-def success(name):
-    return "welcome %s" % name
-
 # this is a weird way to do this
 # right? 
 def widg_fun(widg):
@@ -119,9 +111,7 @@ def login():
         return redirect(url_for('home'))
 
 if __name__=="__main__":
-    app.add_url_rule('/home2/<name>', 'home2', home2)
     app.add_url_rule('/rules', 'rules', rules)
-    app.add_url_rule('/success/<name>', 'success', success)
     app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
     app.add_url_rule('/req/signup', 'signup', signup, methods = ['POST'])
