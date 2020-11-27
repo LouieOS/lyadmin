@@ -96,6 +96,7 @@ def signup():
     # request
     username = request.form["username"]
     email = request.form["email"]
+    pub_key = request.form["pub_key"]
     shell = request.form["shell"]
     rule_read = request.form["rule_read"]
 
@@ -133,7 +134,7 @@ def signup():
         ident_file.write(str(username) + "\n")
         ident_file.write(str(email) + "\n")
         ident_file.write(str(shell) + "\n")
-        ident_file.write(str(rule_read) + "\n")
+        ident_file.write(str(pub_key) + "\n")
         
     print(username + " " + email + " " + shell + " " + rule_read)
     return render_template("signup.html", is_email_user = is_email_user)
