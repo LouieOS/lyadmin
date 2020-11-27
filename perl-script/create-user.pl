@@ -69,7 +69,7 @@ sub create($){
 	}
 	
 	system($cmd);
-	system("echo '$pub_key' > /home/$username/.ssh/authorized_keys");
+	system("echo '".$pub_key."' > /home/$username/.ssh/authorized_keys");
 	system("chmod 711 /home/$username");
 	system("mv $fn1 $fn1.done");
 	system("echo $username >> user_list.txt");
