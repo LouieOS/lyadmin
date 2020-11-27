@@ -76,7 +76,7 @@ def req():
         def __init__(self, w_name, w_type, w_opt):
             self.w_name = w_name
             self.w_type = w_type
-            self.w_opt = w_opt
+            self.w_opt = w_opt # only for choice type widg
 
     # Configuration for our request form
     rt = {
@@ -119,6 +119,8 @@ def signup():
     # this checks how many requests we have
     # and gives us a free ID so we can save
     # our request
+    # This sets the ID of the request we're
+    # abou to save to dsik
     if(len(glob.glob("./test/[0-9]*ident*")) == 0):
         new_id = int(INIT_REQ_ID)
         new_id_str = INIT_REQ_ID
