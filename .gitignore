@@ -7,3 +7,4 @@ test_*.txt
 */p2.pl
 user_list.txt
 req/*.ident
+req/*.ident.done
