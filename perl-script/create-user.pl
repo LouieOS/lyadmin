@@ -2,16 +2,26 @@
 
 use warnings;
 use strict;
+use JSON;
 
 my $WORKING_DIR = "/home/gashapwn/lyadmin/";
 my $ACCOUNT_DIR = "test/";
 
 my $FULL_PATH = "$WORKING_DIR$ACCOUNT_DIR";
+my $CONF_PATH = $WORKING_DIR."lyadmin.conf.json";
+my $SHELL_ENUM;
 
-my $SHELL_ENUM = {
-    "SHELL_BASH" => "/usr/local/bin/bash",
-    "SHELL_KSH" => "/bin/ksh"
+open FILE, $CONF_PATH or die "could not open file $CONF_PATH";
+{
+    my $conf_str;
+    my $conf_obj;
+    local $/=undef;
+    $conf_str = <FILE>;
+    chomp $conf_str;
+    $conf_obj = decode_json($conf_str);
+    $SHELL_ENUM = $conf_obj->{"shell"};
 };
+close FILE;
 
 my @g;
 
@@ -28,13 +38,16 @@ sub create($){
     open FILE, $fn1 or die "could not open file $fn1";
     $username = <FILE>;
     chomp $username;
-    
+
     $user_email = <FILE>;
     chomp $user_email;
     
     {
 	my $s0 = <FILE>;
 	chomp $s0;
+	unless($SHELL_ENUM->{$s0}){
+	    die "invalid shell setting $s0 in file $id.ident";
+	}
 	$shell_pref = $SHELL_ENUM->{$s0};
     }
 
