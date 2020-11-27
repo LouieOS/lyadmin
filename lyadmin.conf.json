@@ -1,5 +1,6 @@
 {
     "instance_name": "lingy.in",
+    "listen_ip": "104.248.118.130",
     "shell": {
 	"SHELL_BASH": "/usr/local/bin/bash",
 	"SHELL_KSH": "/bin/ksh"

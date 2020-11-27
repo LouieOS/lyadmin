@@ -115,4 +115,5 @@ if __name__=="__main__":
     app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
     app.add_url_rule('/req/signup', 'signup', signup, methods = ['POST'])
-    app.run(host="104.248.118.130",debug=True)
+    # app.run(host="104.248.118.130",debug=True)
+    app.run(host=conf_obj["listen_ip"],debug=True)
