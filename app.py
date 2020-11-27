@@ -137,18 +137,9 @@ def signup():
         
     print(username + " " + email + " " + shell + " " + rule_read)
     return render_template("signup.html", is_email_user = is_email_user)
-    
-
-def login():
-    if request.method == "POST":
-        user = request.form["nm"]
-        return redirect(url_for('success', name = user))
-    else:
-        return redirect(url_for('home'))
 
 if __name__=="__main__":
     app.add_url_rule('/rules', 'rules', rules)
-    app.add_url_rule('/login', 'login', login, methods = ['POST', 'GET'])
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
     app.add_url_rule('/req/signup', 'signup', signup, methods = ['POST'])
     app.run(host=conf_obj["listen_ip"],debug=True)
