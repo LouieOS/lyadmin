@@ -14,8 +14,6 @@ from flask import Flask, redirect, url_for, render_template, request
 # gasahwpn on irc.lainchan.org
 
 
-
-
 app=Flask(__name__)
 
 # Paths for conf file,
@@ -140,6 +138,10 @@ def signup():
         
     return render_template("signup.html", is_email_user = is_email_user)
 
+@app.context_processor
+def get_site_name():
+      return {"site_name": conf_obj["site_name"]}
+  
 if __name__=="__main__":
     app.add_url_rule('/rules', 'rules', rules)
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
