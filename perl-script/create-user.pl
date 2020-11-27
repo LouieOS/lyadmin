@@ -5,7 +5,7 @@ use strict;
 use JSON;
 
 my $WORKING_DIR = "/home/gashapwn/lyadmin/";
-my $ACCOUNT_DIR = "test/";
+my $ACCOUNT_DIR = "req/";
 
 my $FULL_PATH = "$WORKING_DIR$ACCOUNT_DIR";
 my $CONF_PATH = $WORKING_DIR."lyadmin.conf.json";

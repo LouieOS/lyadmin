@@ -6,3 +6,4 @@ test_*.txt
 */p1.pl
 */p2.pl
 user_list.txt
+req/*.ident

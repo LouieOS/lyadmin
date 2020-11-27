@@ -21,7 +21,7 @@ app=Flask(__name__)
 #           directory containing
 #           account request files...
 WORKING_DIR = "/home/gashapwn/lyadmin/";
-ACCOUNT_DIR = "test/";
+ACCOUNT_DIR = "req/";
 FULL_PATH = str(WORKING_DIR) + str(ACCOUNT_DIR)
 CONF_PATH = str(WORKING_DIR) + "lyadmin.conf.json"
 
@@ -119,11 +119,12 @@ def signup():
     # our request
     # This sets the ID of the request we're
     # abou to save to dsik
-    if(len(glob.glob("./test/[0-9]*ident*")) == 0):
+    if(len(glob.glob(ACCOUNT_DIR + str("[0-9]*ident*"))) == 0):
         new_id = int(INIT_REQ_ID)
         new_id_str = INIT_REQ_ID
     else:
-        max_id = max(list(map( lambda path : path.split("/")[-1].split(".")[0] , glob.glob("./test/[0-9]*ident*"))))
+        max_id = max(list(map( lambda path : path.split("/")[-1].split(".")[0] , glob.glob(str(ACCOUNT_DIR) + "[0-9]*ident*"))))
+        # max_id = max(list(map( lambda path : path.split("/")[-1].split(".")[0] , glob.glob("./test/[0-9]*ident*"))))
         zpad = len(max_id)
         new_id = int(max_id)+1
         new_id_str = str(new_id).zfill(zpad)
