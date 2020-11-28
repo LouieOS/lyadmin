@@ -31,6 +31,12 @@ CONF_PATH = str(WORKING_DIR) + "lyadmin.conf.json"
 
 MAX_PUB_KEY_LEN = 5000
 
+# SHELL_ENUM = map(
+#                 lambda k : (k, conf_obj["shell"][k]),
+#                 list(conf_obj["shell"].keys())
+#             )
+
+
 # Account requests are given ID numbers
 # the first request will have the below
 # id number
@@ -84,11 +90,36 @@ def req():
 
     # Configuration for our request form
     rt = {
-        "username": Widg("username", "input", None),
-        "email for account lockout / registration confirmation (optional)": Widg("email", "input", None),
-        "SSH public key": Widg("pub_key", "textarea", None),
-        "shell of choice": Widg("shell", "choice", map(lambda k : (k, conf_obj["shell"][k]), list(conf_obj["shell"].keys()))),
-        "have you read the rules?": Widg("rule_read", "check", None)
+        "username": Widg(
+            "username",
+            "input",
+            None
+        ),
+        
+        "email for account lockout / registration confirmation (optional)": Widg(
+            "email",
+            "input",
+            None
+        ),
+        
+        "SSH public key": Widg(
+            "pub_key",
+            "textarea",
+            None
+        ),
+        
+        "shell of choice": Widg(
+            "shell",
+            "choice",
+            map(
+                lambda k : (k, conf_obj["shell"][k]),
+                list(conf_obj["shell"].keys())
+            )
+        ),
+        
+        "have you read the rules?": Widg(
+            "rule_read", "check", None
+        )
         };
     return render_template("req.html", req_tab = rt, widg_fun = widg_fun, page_name="req")
 
