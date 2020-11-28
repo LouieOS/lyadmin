@@ -13,7 +13,7 @@ use strict;
 # Nov 2020
 
 my $GIT_REPO = 'https://git.lain.church/gashapwn/lyadmin.git';
-
+my ($REPO_DIR) = $GIT_REPO =~ /\/([^\/]*)\.git$/;
 
 my $pwuid;
 my $admin_un;
@@ -45,7 +45,7 @@ system("pkg_add git");
 system("pkg_add python3");
 chdir $admin_home_dir;
 system("su gashapwn -c 'git clone $GIT_REPO'");
-chdir $GIT_REPO;
+chdir $REPO_DIR;
 system("su gashapwn -c 'python3 -m venv venv'");
 # system("su gashapwn -c '. ./venv/bin/activate && pip3 install -r ");
 
