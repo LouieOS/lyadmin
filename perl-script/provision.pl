@@ -26,7 +26,7 @@ if($pwuid ne "root"){
 
 # Check /etc/passwd for the username created during
 # installation
-if( ($admin_un) = `tail /etc/passwd | grep -v "nobody:"` =~ /([^:]+):[^:]+:[0-9]{4,}/){
+if( ($admin_un) = `tail /etc/passwd | grep -v "nobody:"` =~ /([^:\n]+):[^:]+:[0-9]{4,}/){
     printf("admin user will be set to %s\n", $admin_un);
 }else{
     die "create a non-root user & set user passsword before running this script."
