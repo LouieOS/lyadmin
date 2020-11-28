@@ -1,5 +1,9 @@
 import glob
 import json
+
+import re
+import sshpubkeys
+
 from flask import Flask, redirect, url_for, render_template, request
 
 # lyadmin
@@ -24,6 +28,8 @@ WORKING_DIR = "/home/gashapwn/lyadmin/";
 ACCOUNT_DIR = "req/";
 FULL_PATH = str(WORKING_DIR) + str(ACCOUNT_DIR)
 CONF_PATH = str(WORKING_DIR) + "lyadmin.conf.json"
+
+MAX_PUB_KEY_LEN = 5000
 
 # Account requests are given ID numbers
 # the first request will have the below
@@ -86,17 +92,21 @@ def req():
         };
     return render_template("req.html", req_tab = rt, widg_fun = widg_fun, page_name="req")
 
+def handle_invalid_data(req):
+    # print(str(e))
+    return render_template("signup.html", is_email_user = False)
+
 # Process input from the /req page
 def signup():
     app.route('/req/signup')
 
     # Get all the params from the POST
     # request
-    username = request.form["username"]
-    email = request.form["email"]
-    pub_key = request.form["pub_key"]
-    shell = request.form["shell"]
-    rule_read = request.form["rule_read"]
+    username = request.form["username"].strip()
+    email = request.form["email"].strip()
+    pub_key = request.form["pub_key"].strip()
+    shell = request.form["shell"].strip()
+    rule_read = request.form["rule_read"].strip()
 
     is_email_user = False;
 
@@ -112,6 +122,31 @@ def signup():
         is_email_user = True
     else:
         email = "NO_EMAIL"
+
+    # Validate email
+    if( not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,10}$", email)):
+        print("failed email validation")
+        return handle_invalid_data(req)
+        
+    # Validate the SSH pub key
+    # Most software only handles up to 4096 bit keys
+    if(len(pub_key) > MAX_PUB_KEY_LEN):
+        print("key failed len check")
+        return handle_invalid_data(req)
+
+    # Only printable ascii characters in
+    # a valid key
+    if(not re.search("^[ -~]+$", pub_key)):
+        print("key failed regex")
+        return handle_invalid_data(req)
+
+    # Check the key against a library
+    key = sshpubkeys.SSHKey(pub_key, strict_mode=False, skip_option_parsing=True)
+    try:
+        key.parse()
+    except Exception as e:
+        print("key failed lib validation")
+        return handle_invalid_data(request)
 
     # All users requests have a sequential ID
     # this checks how many requests we have
