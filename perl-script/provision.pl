@@ -42,13 +42,14 @@ system("echo 'permit $admin_un' > /etc/doas.conf");
 
 # install git
 system("pkg_add git");
-system("su gashapwn -c 'git clone $GIT_REPO'");
 chdir $admin_home_dir;
+# clone repo
+system("su $admin_un -c 'git clone $GIT_REPO'");
 chdir $REPO_DIR;
 
 # Setup the virtual environment
 system("pkg_add python3");
-system("su gashapwn -c 'python3 -m venv venv'");
-system("su gashapwn -c '. ./venv/bin/activate && pip3 install -r ");
+system("su $admin_un -c 'python3 -m venv venv'");
+system("su $admin_un -c '. ./venv/bin/activate && pip3 install -r ");
 
 system("pkg_add p5-JSON");
