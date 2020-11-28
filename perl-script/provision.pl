@@ -45,4 +45,7 @@ system("pkg_add git");
 system("pkg_add python3");
 chdir $admin_home_dir;
 system("su gashapwn -c 'git clone $GIT_REPO'");
+chdir $GITREPO;
 system("su gashapwn -c 'python3 -m venv venv'");
+# system("su gashapwn -c '. ./venv/bin/activate && pip3 install -r ");
+
