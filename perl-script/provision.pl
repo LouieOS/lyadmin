@@ -16,8 +16,8 @@ my $GIT_REPO = 'https://git.lain.church/gashapwn/lyadmin.git';
 my ($REPO_DIR) = $GIT_REPO =~ /\/([^\/]*)\.git$/;
 
 my $pwuid;
-my $admin_un;
 
+my $admin_un;
 my $admin_home_dir;
 
 # Make sure we're running as root
@@ -42,10 +42,13 @@ system("echo 'permit $admin_un' > /etc/doas.conf");
 
 # install git
 system("pkg_add git");
-system("pkg_add python3");
-chdir $admin_home_dir;
 system("su gashapwn -c 'git clone $GIT_REPO'");
+chdir $admin_home_dir;
 chdir $REPO_DIR;
+
+# Setup the virtual environment
+system("pkg_add python3");
 system("su gashapwn -c 'python3 -m venv venv'");
 system("su gashapwn -c '. ./venv/bin/activate && pip3 install -r ");
 
+system("pkg_add p5-JSON");
