@@ -142,6 +142,7 @@ def signup():
     pub_key = request.form["pub_key"].strip()
     shell = request.form["shell"].strip()
     rule_read = request.form["rule_read"].strip()
+    xff_header = request.headers["X-Forwarded-For"]
 
     is_email_user = False;
 
@@ -191,6 +192,9 @@ def signup():
         print("key failed lib validation")
         return handle_invalid_data(request)
 
+    if(len(xff_header) < 1):
+        xff_header = "NO_XFF"
+    
     # All users requests have a sequential ID
     # The below picks the next ID based on
     # how many requests we already have saved
@@ -215,6 +219,7 @@ def signup():
         ident_file.write(str(email) + "\n")
         ident_file.write(str(shell) + "\n")
         ident_file.write(str(pub_key) + "\n")
+        ident_file.write(str(xff_header) + "\n")
         
     return render_template("signup.html", is_email_user = is_email_user)
 
