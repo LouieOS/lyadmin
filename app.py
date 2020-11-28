@@ -214,6 +214,10 @@ def signup():
 def get_site_name():
       return {"site_name": conf_obj["site_name"]}
 
+@app.context_processor
+def get_admin_email():
+      return {"admin_email": conf_obj["admin_email"]}
+
 def check_pwd_for_conf():
     pwd_file_list = list(map(
         lambda path : path.split("/")[-1],

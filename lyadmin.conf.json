@@ -1,5 +1,6 @@
 {
     "site_name": "tildezero.xyz",
+    "admin_email": "admin@example.com",
     "listen_ip": "127.0.0.1",
     "shell": {
 	"SHELL_BASH": "/usr/local/bin/bash",
