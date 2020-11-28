@@ -42,7 +42,7 @@ with open(CONF_PATH) as c: conf_json_str = c.read()
 conf_obj = json.loads(conf_json_str)
 
 # A list of all the shell enums
-SHELL_TUP_LIST = list(map(
+conf_obj.shell_tup_list = list(map(
                 lambda k : (
                     k, conf_obj["shell"][k]
                 ),
@@ -98,25 +98,21 @@ def req():
             "input",
             None
         ),
-        
         "email for account lockout / registration confirmation (optional)": Widg(
             "email",
             "input",
             None
         ),
-        
         "SSH public key": Widg(
             "pub_key",
             "textarea",
             None
         ),
-        
         "shell of choice": Widg(
             "shell",
             "choice",
-            SHELL_TUP_LIST
+            conf_obj.shell_tup_list
         ),
-        
         "have you read the rules?": Widg(
             "rule_read", "check", None
         )
@@ -194,8 +190,11 @@ def signup():
         new_id = int(INIT_REQ_ID)
         new_id_str = INIT_REQ_ID
     else:
-        max_id = max(list(map( lambda path : path.split("/")[-1].split(".")[0] , glob.glob(str(ACCOUNT_DIR) + "[0-9]*ident*"))))
-        # max_id = max(list(map( lambda path : path.split("/")[-1].split(".")[0] , glob.glob("./test/[0-9]*ident*"))))
+        max_id = max(
+            list(map(
+                lambda path : path.split("/")[-1].split(".")[0],
+                glob.glob(str(ACCOUNT_DIR) + "[0-9]*ident*")))
+        )
         zpad = len(max_id)
         new_id = int(max_id)+1
         new_id_str = str(new_id).zfill(zpad)
