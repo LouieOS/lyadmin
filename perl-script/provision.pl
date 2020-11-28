@@ -42,6 +42,7 @@ system("echo 'permit $admin_un' > /etc/doas.conf");
 
 # install git
 system("pkg_add git");
+system("pkg_add python3");
 chdir $admin_home_dir;
 system("su gashapwn -c 'git clone $GIT_REPO'");
-
+system("su gashapwn -c 'python3 -m venv venv'");
