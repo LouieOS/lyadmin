@@ -29,8 +29,10 @@ ACCOUNT_DIR = "req/";
 FULL_PATH = str(WORKING_DIR) + str(ACCOUNT_DIR)
 CONF_PATH = str(WORKING_DIR) + "lyadmin.conf.json"
 
+# validation stuff
 MAX_PUB_KEY_LEN = 5000
-
+EMAIL_REGEX = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,10}$"
+KEY_REGEX = "^[ -~]+$"
 
 # Account requests are given ID numbers
 # the first request will have the below
@@ -42,7 +44,7 @@ with open(CONF_PATH) as c: conf_json_str = c.read()
 conf_obj = json.loads(conf_json_str)
 
 # A list of all the shell enums
-conf_obj.shell_tup_list = list(map(
+conf_obj["shell_tup_list"] = list(map(
                 lambda k : (
                     k, conf_obj["shell"][k]
                 ),
@@ -63,22 +65,23 @@ def home():
     
     return render_template("index.html", u_list=u_list, page_name="home")
 
-
-# The page with rules
+# Generates the page with rule. No logic needed.
 def rules():
     return render_template("rules.html")
 
 # Generate HTML for a form widget
 def widg_fun(widg):
     if(widg.w_type == "input"):
-        # Return HTML for a single line input
-        return "input id=id_%s name=%s type=text></input"%(widg.w_name, widg.w_name)
+        return "input id=id_%s name=%s type=text></input"%(
+            widg.w_name, widg.w_name
+        )
     elif(widg.w_type == "textarea"):
-        # Return HTML for a big text input box
-        return "textarea cols=40 id=id_%s name=%s rows=10 required=\"\""%(widg.w_name, widg.w_name)
+        return "textarea cols=40 id=id_%s name=%s rows=10 required=\"\""%(
+            widg.w_name, widg.w_name
+        )
     elif(widg.w_type == "check"):
-        # Return HTML for a check box
-        return "input id=id_%s name=%s type=checkbox required=\"\""%(widg.w_name, widg.w_name)
+        return "input id=id_%s name=%s type=checkbox required=\"\""%(
+            widg.w_name, widg.w_name)
     return widg.w_type;
 
 # Generate HTML for request form
@@ -111,19 +114,24 @@ def req():
         "shell of choice": Widg(
             "shell",
             "choice",
-            conf_obj.shell_tup_list
+            conf_obj["shell_tup_list"]
         ),
         "have you read the rules?": Widg(
             "rule_read", "check", None
         )
         };
-    return render_template("req.html", req_tab = rt, widg_fun = widg_fun, page_name="req")
+    return render_template(
+        "req.html",
+        req_tab = rt,
+        widg_fun = widg_fun,
+        page_name="req"
+    )
 
 def handle_invalid_data(req):
     # print(str(e))
     return render_template("signup.html", is_email_user = False)
 
-# Process input from the /req page
+# Process input from user creation POST request
 def signup():
     app.route('/req/signup')
 
@@ -139,8 +147,6 @@ def signup():
 
     # If a user didnt read the rules
     # send them back
-    # Browser validations should
-    # prevent this....
     if(rule_read != "on"):
         return redirect(url_for('req'))
 
@@ -156,7 +162,7 @@ def signup():
         return handle_invalid_data(req)
 
     # Validate email
-    if( not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,10}$", email)):
+    if( is_email_user and not re.search(EMAIL_REGEX, email)):
         print("failed email validation")
         return handle_invalid_data(req)
         
@@ -168,12 +174,17 @@ def signup():
 
     # Only printable ascii characters in
     # a valid key
-    if(not re.search("^[ -~]+$", pub_key)):
+    # if(not re.search("^[ -~]+$", pub_key)):
+    if(not re.search(KEY_REGEX, pub_key)):
         print("key failed regex")
         return handle_invalid_data(req)
 
     # Check the key against a library
-    key = sshpubkeys.SSHKey(pub_key, strict_mode=False, skip_option_parsing=True)
+    key = sshpubkeys.SSHKey(
+        pub_key,
+        strict_mode=False,
+        skip_option_parsing=True
+    )
     try:
         key.parse()
     except Exception as e:
@@ -181,11 +192,9 @@ def signup():
         return handle_invalid_data(request)
 
     # All users requests have a sequential ID
-    # this checks how many requests we have
-    # and gives us a free ID so we can save
-    # our request
-    # This sets the ID of the request we're
-    # abou to save to dsik
+    # The below picks the next ID based on
+    # how many requests we already have saved
+    # to disk
     if(len(glob.glob(ACCOUNT_DIR + str("[0-9]*ident*"))) == 0):
         new_id = int(INIT_REQ_ID)
         new_id_str = INIT_REQ_ID
