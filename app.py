@@ -31,11 +31,6 @@ CONF_PATH = str(WORKING_DIR) + "lyadmin.conf.json"
 
 MAX_PUB_KEY_LEN = 5000
 
-# SHELL_ENUM = map(
-#                 lambda k : (k, conf_obj["shell"][k]),
-#                 list(conf_obj["shell"].keys())
-#             )
-
 
 # Account requests are given ID numbers
 # the first request will have the below
@@ -45,6 +40,14 @@ INIT_REQ_ID = "00000"
 # Slurp the conf file
 with open(CONF_PATH) as c: conf_json_str = c.read()
 conf_obj = json.loads(conf_json_str)
+
+# A list of all the shell enums
+SHELL_TUP_LIST = list(map(
+                lambda k : (
+                    k, conf_obj["shell"][k]
+                ),
+                list(conf_obj["shell"].keys())
+))
 
 # The main home page
 @app.route("/")
@@ -111,10 +114,7 @@ def req():
         "shell of choice": Widg(
             "shell",
             "choice",
-            map(
-                lambda k : (k, conf_obj["shell"][k]),
-                list(conf_obj["shell"].keys())
-            )
+            SHELL_TUP_LIST
         ),
         
         "have you read the rules?": Widg(
@@ -153,6 +153,11 @@ def signup():
         is_email_user = True
     else:
         email = "NO_EMAIL"
+
+    # Validate shell
+    if(not shell in conf_obj["shell"]):
+        print("failed shell validation")
+        return handle_invalid_data(req)
 
     # Validate email
     if( not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,10}$", email)):
