@@ -49,7 +49,8 @@ chdir $REPO_DIR;
 
 # Setup the virtual environment
 system("pkg_add python3");
+printf("generating virutal enviornment...\n");
 system("su $admin_un -c 'python3 -m venv venv'");
-system("su $admin_un -c '. ./venv/bin/activate && pip3 install -r ");
+system("su $admin_un -c '. ./venv/bin/activate && pip3 install -r requirements.txt");
 
 system("pkg_add p5-JSON");
