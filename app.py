@@ -17,17 +17,15 @@ from flask import Flask, redirect, url_for, render_template, request
 # or
 # gasahwpn on irc.lainchan.org
 
-
 app=Flask(__name__)
 
 # Paths for conf file,
 #           user list,
 #           directory containing
 #           account request files...
-WORKING_DIR = "/home/gashapwn/lyadmin/";
-ACCOUNT_DIR = "req/";
-FULL_PATH = str(WORKING_DIR) + str(ACCOUNT_DIR)
-CONF_PATH = str(WORKING_DIR) + "lyadmin.conf.json"
+ACCOUNT_PATH = "./req/";
+CONF_FN = "lyadmin.conf.json"
+CONF_PATH = "./" + str(CONF_FN)
 
 # validation stuff
 MAX_PUB_KEY_LEN = 5000
@@ -38,18 +36,6 @@ KEY_REGEX = "^[ -~]+$"
 # the first request will have the below
 # id number
 INIT_REQ_ID = "00000"
-
-# Slurp the conf file
-with open(CONF_PATH) as c: conf_json_str = c.read()
-conf_obj = json.loads(conf_json_str)
-
-# A list of all the shell enums
-conf_obj["shell_tup_list"] = list(map(
-                lambda k : (
-                    k, conf_obj["shell"][k]
-                ),
-                list(conf_obj["shell"].keys())
-))
 
 # The main home page
 @app.route("/")
@@ -199,21 +185,22 @@ def signup():
     # The below picks the next ID based on
     # how many requests we already have saved
     # to disk
-    if(len(glob.glob(ACCOUNT_DIR + str("[0-9]*ident*"))) == 0):
+    if(len(glob.glob(ACCOUNT_PATH + str("[0-9]*ident*"))) == 0):
         new_id = int(INIT_REQ_ID)
         new_id_str = INIT_REQ_ID
     else:
         max_id = max(
             list(map(
                 lambda path : path.split("/")[-1].split(".")[0],
-                glob.glob(str(ACCOUNT_DIR) + "[0-9]*ident*")))
+                glob.glob(str(ACCOUNT_PATH) + "[0-9]*ident*")))
         )
         zpad = len(max_id)
         new_id = int(max_id)+1
         new_id_str = str(new_id).zfill(zpad)
 
     # write the request to disk
-    fn1 = str(FULL_PATH) + str(new_id_str) + ".ident"
+    # fn1 = str(FULL_PATH) + str(new_id_str) + ".ident"
+    fn1 = str(ACCOUNT_PATH) + str(new_id_str) + ".ident"
     with open(fn1, "w") as ident_file:
         ident_file.write(str(username) + "\n")
         ident_file.write(str(email) + "\n")
@@ -226,9 +213,36 @@ def signup():
 @app.context_processor
 def get_site_name():
       return {"site_name": conf_obj["site_name"]}
-  
-if __name__=="__main__":
+
+def check_pwd_for_conf():
+    pwd_file_list = list(map(
+        lambda path : path.split("/")[-1],
+        glob.glob("*")
+    ))
+    if(not CONF_FN in pwd_file_list):
+        print("could not find " + str(CONF_PATH))
+        print("please run in the installation directory")
+        return False
+    return True
+
+# MAIN STARTS HERE
+if(__name__=="__main__" and check_pwd_for_conf()):
+    # Slurp the conf file
+    with open(CONF_PATH) as c: conf_json_str = c.read()
+    conf_obj = json.loads(conf_json_str)
+
+    # A global list of all the shell enums
+    conf_obj["shell_tup_list"] = list(map(
+        lambda k : (
+            k, conf_obj["shell"][k]
+        ),
+        list(conf_obj["shell"].keys())
+    ))
+
+    # Setup URL rules
     app.add_url_rule('/rules', 'rules', rules)
     app.add_url_rule('/req', 'req', req, methods = ['POST', 'GET'])
     app.add_url_rule('/req/signup', 'signup', signup, methods = ['POST'])
+
+    # Run that app!
     app.run(host=conf_obj["listen_ip"],debug=True)
