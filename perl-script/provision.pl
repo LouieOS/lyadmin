@@ -32,3 +32,5 @@ if( ($admin_un) = `tail /etc/passwd | grep -v "nobody:"` =~ /([^:\n]+):[^:]+:[0-
     die "create a non-root user & set user passsword before running this script."
 }
 
+# grant doas access to admin user
+system("echo 'permit $admin_un' > /etc/doas.conf");
