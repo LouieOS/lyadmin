@@ -54,6 +54,7 @@ system("cp -r ./skel/* /etc/skel/");
 # setup admin user
 system("cp -r ./skel/* /home/$admin_un/");
 system("chown -R $admin_un:$admin_un /home/$admin_un");
+system("echo $admin_un >> ./user_list.txt");
 
 # Setup the virtual environment
 system("pkg_add python3");
@@ -94,3 +95,5 @@ system("pkg_add haproxy");
 printf("configuring haproxy\n");
 system("cp ./perl-script/conf/haproxy.cfg /etc/haproxy/haproxy.cfg");
 system("rcctl start haproxy");
+
+printf("dont forget to setup your ssh pub key at /home/$admin_un/.ssh/authorized_keys\n");
