@@ -65,7 +65,7 @@ system("pkg_add p5-JSON");
 
 # Install apache
 system("pkg_add apache-httpd");
-
+printf("configuring apache\n");
 # enable the userdir module
 system("sed -i -e 's/^\\(.\\)*#\\(LoadModule userdir_module\\)/\\1\\2/' /etc/apache2/httpd2.conf");
 system("sed -i -e 's/^\\(.\\)*#\\(Include \\/etc\\/apache2\\/extra\\/httpd-userdir.conf\\)/\\1\\2/' /etc/apache2/httpd2.conf");
@@ -84,3 +84,13 @@ system("sed -i -e 's/\\(<\\/Directory>\\)/    Options -Indexes\\
 
 # Change the port to 5001
 system("sed -i -e 's/^\\(.\\)*Listen *80/\\1Listen 5001/' /etc/apache2/httpd2.conf");
+# rev up those apache processes!
+system("rcctl start apache2");
+
+
+# Install and config haproxy
+system("pkg_add haproxy");
+
+printf("configuring haproxy\n");
+system("cp ./conf/haproxy.cfg /etc/haproxy/haproxy.cfg");
+system("rcctl start haproxy");
