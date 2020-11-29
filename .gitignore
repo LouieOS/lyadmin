@@ -5,3 +5,4 @@ test_*.txt
 */p[0-9].pl
 notes.txt
 user_list.txt
+.#*

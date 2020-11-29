@@ -4,11 +4,11 @@ use warnings;
 use strict;
 use JSON;
 
-my $WORKING_DIR = "/home/gashapwn/lyadmin/";
-my $ACCOUNT_DIR = "req/";
 
-my $FULL_PATH = "$WORKING_DIR$ACCOUNT_DIR";
-my $CONF_PATH = $WORKING_DIR."lyadmin.conf.json";
+my $working_dir = "./";
+my $account_dir = $working_dir."req/";
+
+my $CONF_PATH = $working_dir."lyadmin.conf.json";
 my $SHELL_ENUM;
 
 open FILE, $CONF_PATH or die "could not open file $CONF_PATH";
@@ -28,7 +28,7 @@ my @g;
 sub create($){
     my $id = $_[0];
     
-    my $fn1 = $FULL_PATH.$id.".ident";
+    my $fn1 = $account_dir.$id.".ident";
 
     my $username;
     my $shell_pref;
@@ -77,7 +77,11 @@ sub create($){
     close FILE;
 }
 
-@g = glob("$FULL_PATH*");
+if(!(`id` =~ /uid=0/)){
+    die "please run this script as root";
+}
+
+@g = glob("$account_dir*");
 @g = map { s/.*\/([^\/]*).ident$/$1/; $_ } grep {$_ =~ /ident$/} @g;
 
 for my $fn (@g){
