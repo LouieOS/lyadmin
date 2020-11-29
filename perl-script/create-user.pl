@@ -8,20 +8,8 @@ use JSON;
 my $working_dir = "./";
 my $account_dir = $working_dir."req/";
 
-my $CONF_PATH = $working_dir."lyadmin.conf.json";
+my $conf_path = $working_dir."lyadmin.conf.json";
 my $SHELL_ENUM;
-
-open FILE, $CONF_PATH or die "could not open file $CONF_PATH";
-{
-    my $conf_str;
-    my $conf_obj;
-    local $/=undef;
-    $conf_str = <FILE>;
-    chomp $conf_str;
-    $conf_obj = decode_json($conf_str);
-    $SHELL_ENUM = $conf_obj->{"shell"};
-};
-close FILE;
 
 my @g;
 
@@ -80,6 +68,27 @@ sub create($){
 if(!(`id` =~ /uid=0/)){
     die "please run this script as root";
 }
+
+if( `pwd` =~ /perl-script\/?\s*$/){
+    $working_dir = "../";
+    $account_dir = $working_dir."req/";
+    $conf_path = $working_dir."lyadmin.conf.json";
+    printf("%s\n", $conf_path);
+}elsif(!(join(" ", glob("./*")) =~ /perl-script/)){
+    die "please run this script with ./perl-script/ as the present working directory";
+}
+
+open FILE, $conf_path or die "could not open file $conf_path";
+{
+    my $conf_str;
+    my $conf_obj;
+    local $/=undef;
+    $conf_str = <FILE>;
+    chomp $conf_str;
+    $conf_obj = decode_json($conf_str);
+    $SHELL_ENUM = $conf_obj->{"shell"};
+};
+close FILE;
 
 @g = glob("$account_dir*");
 @g = map { s/.*\/([^\/]*).ident$/$1/; $_ } grep {$_ =~ /ident$/} @g;
