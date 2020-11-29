@@ -48,6 +48,7 @@ system("su $admin_un -c 'git clone $GIT_REPO'");
 chdir $REPO_DIR;
 
 # Copy the skel directory
+system("mkdir ./skel/public_html/cgi");
 system("cp -r ./skel/* /etc/skel/");
 
 # Setup the virtual environment
