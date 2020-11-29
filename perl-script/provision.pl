@@ -67,8 +67,8 @@ system("pkg_add p5-JSON");
 system("pkg_add apache-httpd");
 
 # enable the userdir module
-system("sed -i -e 's/^\(.\)*#\(LoadModule userdir_module\)/\1\2/' /etc/apache2/httpd2.conf");
-system("sed -i -e 's/^\(.\)*#\(Include \/etc\/apache2\/extra\/httpd-userdir.conf\)/\1\2/' /etc/apache2/httpd2.conf");
+system("sed -i -e 's/^\\(.\\)*#\\(LoadModule userdir_module\\)/\\1\\2/' /etc/apache2/httpd2.conf");
+system("sed -i -e 's/^\\(.\\)*#\\(Include \\/etc\\/apache2\\/extra\\/httpd-userdir.conf\\)/\\1\\2/' /etc/apache2/httpd2.conf");
 # Enable the CGI directory
 system("echo '<Directory \"/home/*/public_html/cgi/\">
     Require all granted
@@ -76,11 +76,11 @@ system("echo '<Directory \"/home/*/public_html/cgi/\">
     AddHandler cgi-script .cgi
 </Directory>' >> /etc/apache2/extra/httpd-userdir.conf");
 # Enable the CGI modules
-system("sed -i -e 's/^\(.\)*#\(LoadModule cgi_module\)/\1\2/' /etc/apache2/httpd2.conf");
-system("sed -i -e 's/^\(.\)*#\(LoadModule cgid_module\)/\1\2/' /etc/apache2/httpd2.conf");
+system("sed -i -e 's/^\\(.\\)*#\\(LoadModule cgi_module\\)/\\1\\2/' /etc/apache2/httpd2.conf");
+system("sed -i -e 's/^\\(.\\)*#\\(LoadModule cgid_module\\)/\\1\\2/' /etc/apache2/httpd2.conf");
 # Disable directory listing
-system("sed -i -e 's/\(<\/Directory>\)/    Options -Indexes\
-       \1/g' /etc/apache2/extra/httpd-userdir.conf");
+system("sed -i -e 's/\\(<\\/Directory>\\)/    Options -Indexes\\
+       \\1/g' /etc/apache2/extra/httpd-userdir.conf");
 
 # Change the port to 5001
-system("sed -i -e 's/^\(.\)*Listen *80/\1Listen 5001/' /etc/apache2/httpd2.conf");
+system("sed -i -e 's/^\\(.\\)*Listen *80/\\1Listen 5001/' /etc/apache2/httpd2.conf");
