@@ -47,6 +47,9 @@ chdir $admin_home_dir;
 system("su $admin_un -c 'git clone $GIT_REPO'");
 chdir $REPO_DIR;
 
+# Copy the skel directory
+system("cp -r ./skel/* /etc/skel/");
+
 # Setup the virtual environment
 system("pkg_add python3");
 printf("generating virutal enviornment...\n");

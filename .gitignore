@@ -2,8 +2,6 @@ venv/*
 test/*
 *~
 test_*.txt
-*/p0.pl
-*/p1.pl
-*/p2.pl
+*/p[0-9].pl
 notes.txt
 user_list.txt
