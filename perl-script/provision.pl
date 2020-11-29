@@ -51,6 +51,10 @@ chdir $REPO_DIR;
 system("mkdir ./skel/public_html/cgi");
 system("cp -r ./skel/* /etc/skel/");
 
+# setup admin user
+system("cp -r ./skel/* /home/$admin_un/");
+system("chown -R $admin_un:$admin_un /home/$admin_un");
+
 # Setup the virtual environment
 system("pkg_add python3");
 printf("generating virutal enviornment...\n");
