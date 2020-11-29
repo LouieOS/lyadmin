@@ -57,7 +57,7 @@ system("chown -R $admin_un:$admin_un /home/$admin_un");
 
 # Setup the virtual environment
 system("pkg_add python3");
-printf("generating virutal enviornment...\n");
+printf("generating virtual enviornment...\n");
 system("su $admin_un -c 'python3 -m venv venv'");
 system("su $admin_un -c '. ./venv/bin/activate && pip3 install -r requirements.txt'");
 
@@ -92,5 +92,5 @@ system("rcctl start apache2");
 system("pkg_add haproxy");
 
 printf("configuring haproxy\n");
-system("cp ./conf/haproxy.cfg /etc/haproxy/haproxy.cfg");
+system("cp ./perl-script/conf/haproxy.cfg /etc/haproxy/haproxy.cfg");
 system("rcctl start haproxy");
