@@ -3,7 +3,7 @@
 # lingyind
 
 daemon="cd /tilde/lyadmin/ && . /tilde/lyadmin/venv/bin/activate && python3 /tilde/lyadmin/app.py &"
-daemon_user="lingyind"
+daemon_user="_lingyind"
 
 . /etc/rc.d/rc.subr
 
