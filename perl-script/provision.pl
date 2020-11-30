@@ -14,6 +14,9 @@ use strict;
 
 my $GIT_REPO = 'https://git.lain.church/gashapwn/lyadmin.git';
 my ($REPO_DIR) = $GIT_REPO =~ /\/([^\/]*)\.git$/;
+my $INST_DIR = "/tilde";
+
+my $SVC_ACCT = "lingyind";
 
 my $pwuid;
 
@@ -42,9 +45,14 @@ system("echo 'permit $admin_un' > /etc/doas.conf");
 
 # install git
 system("pkg_add git");
-chdir $admin_home_dir;
+
+# Setup install dir
+system("mkdir $INST_DIR");
+system("useradd -d /tilde -r 100..900 $SVC_ACCT");
+chdir $INST_DIR;
+
 # clone repo
-system("su $admin_un -c 'git clone $GIT_REPO'");
+system("su $SVC_ACCT -c 'git clone $GIT_REPO'");
 chdir $REPO_DIR;
 
 # Copy the skel directory
@@ -59,8 +67,8 @@ system("echo $admin_un >> ./user_list.txt");
 # Setup the virtual environment
 system("pkg_add python3");
 printf("generating virtual enviornment...\n");
-system("su $admin_un -c 'python3 -m venv venv'");
-system("su $admin_un -c '. ./venv/bin/activate && pip3 install -r requirements.txt'");
+system("su $SVC_ACCT -c 'python3 -m venv venv'");
+system("su $SVC_ACCT -c '. ./venv/bin/activate && pip3 install -r requirements.txt'");
 
 system("pkg_add p5-JSON");
 
