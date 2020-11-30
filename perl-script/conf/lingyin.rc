@@ -1,0 +1,17 @@
+#!/bin/ksh
+#
+# lingyind
+
+daemon="cd /tilde/lyadmin/ && . /tilde/lyadmin/venv/bin/activate && python3 /tilde/lyadmin/app.py &"
+daemon_user="lingyind"
+
+. /etc/rc.d/rc.subr
+
+pexp="python3 /tilde/lyadmin/app.py"
+rc_reload=NO
+
+rc_stop() {
+        pkill -f "^${pexp}"
+}
+
+rc_cmd $1

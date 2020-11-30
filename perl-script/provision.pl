@@ -71,6 +71,11 @@ printf("generating virtual enviornment...\n");
 system("su $SVC_ACCT -c 'python3 -m venv venv'");
 system("su $SVC_ACCT -c '. ./venv/bin/activate && pip3 install -r requirements.txt'");
 
+system("cp ./perl-script/conf/lingyin.rc /etc/rc.d/lingyind");
+system("chmod 755 /etc/rc.d/lingyind");
+system("rcctl enable lingyind");
+system("rcctl start lingyind");
+
 system("pkg_add p5-JSON");
 
 # Install apache
@@ -95,14 +100,16 @@ system("sed -i -e 's/\\(<\\/Directory>\\)/    Options -Indexes\\
 # Change the port to 5001
 system("sed -i -e 's/^\\(.\\)*Listen *80/\\1Listen 5001/' /etc/apache2/httpd2.conf");
 # rev up those apache processes!
+system("rcctl enable apache2");
 system("rcctl start apache2");
-
 
 # Install and config haproxy
 system("pkg_add haproxy");
 
 printf("configuring haproxy\n");
 system("cp ./perl-script/conf/haproxy.cfg /etc/haproxy/haproxy.cfg");
+system("rcctl enable haproxy");
 system("rcctl start haproxy");
+
 
 printf("dont forget to setup your ssh pub key at /home/$admin_un/.ssh/authorized_keys\n");
