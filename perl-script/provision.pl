@@ -74,7 +74,7 @@ system("su $SVC_ACCT -c '. ./venv/bin/activate && pip3 install -r requirements.t
 system("cp ./perl-script/conf/lingyin.rc /etc/rc.d/lingyind");
 system("chmod 755 /etc/rc.d/lingyind");
 system("rcctl enable lingyind");
-`rcctl start lingyind &`;
+exec("rcctl start lingyind");
 
 system("pkg_add p5-JSON");
 
