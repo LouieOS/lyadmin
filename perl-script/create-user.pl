@@ -9,6 +9,7 @@ my $working_dir = "./";
 my $account_dir = $working_dir."req/";
 
 my $conf_path = $working_dir."lyadmin.conf.json";
+my $ul_path = $working_dir."user_list.txt";
 my $SHELL_ENUM;
 
 my @g;
@@ -60,7 +61,8 @@ sub create($){
 	system("echo '".$pub_key."' > /home/$username/.ssh/authorized_keys");
 	system("chmod 711 /home/$username");
 	system("mv $fn1 $fn1.done");
-	system("echo $username >> user_list.txt");
+	system("echo $username >> $ul_path");
+	# system("echo $username >> user_list.txt");
     }
     close FILE;
 }
@@ -73,6 +75,7 @@ if( `pwd` =~ /perl-script\/?\s*$/){
     $working_dir = "../";
     $account_dir = $working_dir."req/";
     $conf_path = $working_dir."lyadmin.conf.json";
+    $ul_path = $working_dir."user_list.txt";
     printf("%s\n", $conf_path);
 }elsif(!(join(" ", glob("./*")) =~ /perl-script/)){
     die "please run this script with ./perl-script/ as the present working directory";
