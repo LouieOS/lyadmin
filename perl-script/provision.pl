@@ -16,7 +16,7 @@ my $GIT_REPO = 'https://git.lain.church/gashapwn/lyadmin.git';
 my ($REPO_DIR) = $GIT_REPO =~ /\/([^\/]*)\.git$/;
 my $INST_DIR = "/tilde";
 
-my $SVC_ACCT = "lingyind";
+my $SVC_ACCT = "_lingyind";
 
 my $pwuid;
 
