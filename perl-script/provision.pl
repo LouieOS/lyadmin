@@ -48,7 +48,8 @@ system("pkg_add git");
 
 # Setup install dir
 system("mkdir $INST_DIR");
-system("useradd -d /tilde -r 100..900 $SVC_ACCT");
+system("useradd -d $INST_DIR -r 100..900 $SVC_ACCT");
+system("chown $SVC_ACCT:$SVC_ACCT $INST_DIR");
 chdir $INST_DIR;
 
 # clone repo
